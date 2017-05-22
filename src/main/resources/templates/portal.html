@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <script type="text/javascript" src="@{/jquery-1.4.2.min.js}"></script>
+    <style type="text/css">
+        a:link {
+            text-decoration:none;
+        }
+        a:hover {
+            text-decoration:underline;
+        }
+    </style>
+</head>
+<body>
+<div id="rootDirectory">
+   <a th:href="@{/ftp/showFTPList}" style='color:red;' >根目录</a><br/><br/>
+   <!-- <a onclick='test()' href='#' style='color:red;' >根目录</a><br/><br/>-->
+</div>
+<div id="container">
+    <tr th:each="directory : ${listDirectory}">
+        <a href="portal.html" th:href="@{/ftp/showFTPList(remotePath=${directory.localPath})}" style='color:red;' ><img th:attr="src=@{/images/directory.jpg}"  width='25px' height='25px'><span th:text = "${directory.name}"></span><br/></a>
+    </tr>
+    <tr th:each="file : ${listFile}">
+        <a href="portal.html" th:href="@{/ftp/ftpDownload(filename=${file.name})}" style='color:red;' ><img th:attr="src=@{/images/file.jpg}"  width='25px' height='25px'><span th:text = "${file.name}"></span><br/></a>
+    </tr>
+</div>
+</body>
+<!--<script type="text/javascript">
+   function showList(url){
+        $.ajax({
+            url:url,
+            method:"POST",
+            async:true,
+            success:function (data) {
+                var listDirectory =data.listDirectory ;
+                var listFile =data.listFile;
+                $("#container").empty();
+                var url="/ftp/showFTPList";
+                for(var i = 0;i<listDirectory.length;i++){
+                    $("#container").append("<img src=@{/images/directory.jpg} width='25px' height='25px'> <a onclick='showList("+url+");'   style='color:blue' >"+listDirectory[i].name+"</a><br/>");
+                }
+                for(var j = 0;j<listFile.length;j++){
+                    $("#container").append("<img src=@{/images/file.jpg} width='25px' height='25px'> <a onclick='showList("+url+");'  style='color:green' >"+listFile[j].name+"</a><br/>");
+                }
+            },
+            error:function (message) {
+                alert(message);
+            }
+        });
+    }
+</script>-->
+</html>
