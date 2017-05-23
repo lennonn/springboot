@@ -12,8 +12,11 @@ public class StreamConvert {
     public static ByteArrayInputStream parse(OutputStream out) throws Exception
     {
         ByteArrayOutputStream   baos=new ByteArrayOutputStream();
-        baos=(ByteArrayOutputStream) out;
+        baos.write(1024);
+        byte[] arr=baos.toByteArray();
+        baos.writeTo(out);
         ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
         return swapStream;
+
     }
 }

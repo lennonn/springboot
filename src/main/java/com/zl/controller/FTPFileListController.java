@@ -1,6 +1,7 @@
 package com.zl.controller;
 
 import com.zl.entity.DtsFtpFile;
+import com.zl.entity.FtpAttr;
 import com.zl.service.impl.DownloadFtp;
 import com.zl.service.impl.ListMapFtp;
 import org.apache.log4j.LogManager;
@@ -77,19 +78,20 @@ public class FTPFileListController {
         InputStream is=null;
         try {
             String filename = request.getParameter("filename");// 获得当前文件的名称
-             is = downloadFtp.downFile("127.0.0.1", 21, "admin", "admin",
-                    "", filename, "D:/test/download/");
+            String remotePath = request.getParameter("remotePath");// 获得当前路径
+            FtpAttr fa= new FtpAttr("127.0.0.1", 21, "admin", "admin",
+                    remotePath, filename, "D:/test/download/");
+            downloadFtp.downFile(fa);
             //下载机器码文件
             response.setHeader("conent-type", "application/octet-stream");
             response.setContentType("application/octet-stream");
             response.setHeader("Content-Disposition", "attachment; filename=" + new String(filename.getBytes("ISO-8859-1"), "UTF-8"));
             sout= response.getOutputStream();
-
-            byte buff[] = new byte[1024];
-            int length = 0;
-
-            while ((length = is.read(buff)) > 0) {
-                sout.write(buff,0,length);
+            is= new FileInputStream(new File("F:\\FromGit\\springboot\\src\\main\\resources\\static\\file\\"+filename));
+            byte[] b =new byte[1024];
+            int n;
+            while((n=is.read(b))!=-1){
+                sout.write(b,0,n);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -98,8 +100,8 @@ public class FTPFileListController {
                 if(is!=null)
                     is.close();
                 if(sout!=null)
-                    sout.close();
                     sout.flush();
+                    sout.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -116,7 +118,7 @@ public class FTPFileListController {
     }
     @RequestMapping(value = "directJsp")
     public String directJsp() {
-        logger.debug("--->into ftp/ftp-list.jsp");
-        return "ftp/ftp-list";
+        logger.debug("--->into FtpAttr/FtpAttr-list.jsp");
+        return "FtpAttr/FtpAttr-list";
     }
 }

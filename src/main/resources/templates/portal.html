@@ -23,7 +23,7 @@
         <a href="portal.html" th:href="@{/ftp/showFTPList(remotePath=${directory.localPath})}" style='color:red;' ><img th:attr="src=@{/images/directory.jpg}"  width='25px' height='25px'><span th:text = "${directory.name}"></span><br/></a>
     </tr>
     <tr th:each="file : ${listFile}">
-        <a href="portal.html" th:href="@{/ftp/ftpDownload(filename=${file.name})}" style='color:red;' ><img th:attr="src=@{/images/file.jpg}"  width='25px' height='25px'><span th:text = "${file.name}"></span><br/></a>
+        <a href="portal.html" th:href="@{/ftp/ftpDownload(remotePath=${file.localPath},filename=${file.name})}" style='color:red;' ><img th:attr="src=@{/images/file.jpg}"  width='25px' height='25px'><span th:text = "${file.name}"></span><br/></a>
     </tr>
 </div>
 </body>
@@ -37,7 +37,7 @@
                 var listDirectory =data.listDirectory ;
                 var listFile =data.listFile;
                 $("#container").empty();
-                var url="/ftp/showFTPList";
+                var urFtpAttr/ftp/showFTPList";
                 for(var i = 0;i<listDirectory.length;i++){
                     $("#container").append("<img src=@{/images/directory.jpg} width='25px' height='25px'> <a onclick='showList("+url+");'   style='color:blue' >"+listDirectory[i].name+"</a><br/>");
                 }
