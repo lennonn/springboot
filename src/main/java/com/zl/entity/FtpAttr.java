@@ -1,8 +1,15 @@
 package com.zl.entity;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.Entity;
+
 /**
  * Created by Administrator on 2017/5/23.
  */
+@Component
 public class FtpAttr {
     private String url;// FTP服务器hostname
     private int port;// FTP服务器端口
@@ -12,15 +19,6 @@ public class FtpAttr {
     private String fileName;// 要下载的文件名
     private String localPath;// 下载后保存到本地的路劲
 
-    public FtpAttr(String url, int port, String username, String password, String remotePath, String fileName, String localPath) {
-        this.url = url;
-        this.port = port;
-        this.username = username;
-        this.password = password;
-        this.remotePath = remotePath;
-        this.fileName = fileName;
-        this.localPath = localPath;
-    }
 
     public String getUrl() {
         return url;

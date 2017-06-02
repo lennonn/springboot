@@ -2,7 +2,7 @@ package com.zl.service;
 
 import com.zl.entity.DtsFtpFile;
 import com.zl.entity.FtpAttr;
-import com.zl.util.FileOperater;
+import com.zl.entity.FileOperater;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ftp.FTPClient;
@@ -18,8 +18,9 @@ import java.util.List;
 public abstract class AbstractFtpClientOpr {
     private static final Log log = LogFactory.getLog(AbstractFtpClientOpr.class);
     protected FtpAttr ftpAttr;
-    protected FTPClient ftpClient;
+    protected FTPClient ftpClient=new FTPClient();
     FileOperater fileOperater;
+
     protected List<List<DtsFtpFile>> listMap;
     public List<List<DtsFtpFile>> getListMap() {
         return listMap;
@@ -28,7 +29,7 @@ public abstract class AbstractFtpClientOpr {
     public void setListMap(List<List<DtsFtpFile>> listMap) {
         this.listMap = listMap;
     }
-    public AbstractFtpClientOpr(FtpAttr ftpAttr, FTPClient ftpClient,FileOperater fileOperater) {
+    public AbstractFtpClientOpr(FtpAttr ftpAttr, FileOperater fileOperater) {
         this.ftpAttr = ftpAttr;
         this.ftpClient = ftpClient;
         this.fileOperater = fileOperater;

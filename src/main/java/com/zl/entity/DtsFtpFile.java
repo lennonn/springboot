@@ -1,8 +1,12 @@
 package com.zl.entity;
 
+
+import javax.persistence.Entity;
+
 /**
  * Created by Administrator on 2017/5/7.
  */
+
 public class DtsFtpFile {
     private String name;
     private long size;

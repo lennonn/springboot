@@ -1,11 +1,12 @@
 package com.zl.controller;
 
+import com.zl.dao.mongoDBImpl.FtpAttrStaticImpl;
 import com.zl.entity.DtsFtpFile;
 import com.zl.entity.FtpAttr;
 import com.zl.service.AbstractFtpClientOpr;
 import com.zl.service.impl.DownloadFtp;
 import com.zl.service.impl.ListMapFtp;
-import com.zl.util.FileOperater;
+import com.zl.entity.FileOperater;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -13,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +36,8 @@ public class FTPFileListController {
     private ListMapFtp listMapFtp;
     @Autowired
     private DownloadFtp downloadFtp;
+    @Autowired
+    FtpAttrStaticImpl ftpAttribute;
 
     @RequestMapping("/portal")
     public String portal(){
@@ -59,10 +60,8 @@ public class FTPFileListController {
         if (filename != null) {
             logger.debug("filename:---> " + filename);
         }
-        FtpAttr fa= new FtpAttr("127.0.0.1", 21, "admin", "admin",
-                remotePath, filename, "D:/test/download/");
-        FTPClient ftpClient =new FTPClient();
-        AbstractFtpClientOpr afco =new ListMapFtp(fa,ftpClient, FileOperater.DOWNLOAD);
+        FtpAttr ftpAttr= ftpAttribute.getFtpAttr(remotePath,filename);
+        AbstractFtpClientOpr afco =new ListMapFtp(ftpAttr, FileOperater.DOWNLOAD);
         afco.procesor();
         List<List<DtsFtpFile>> list = afco.getListMap();// 获得ftp对应路径下的所有目录和文件信息
         List<DtsFtpFile> listDirectory = list.get(0);// 获得ftp该路径下的所有目录信息
@@ -86,8 +85,7 @@ public class FTPFileListController {
         try {
             String filename = request.getParameter("filename");// 获得当前文件的名称
             String remotePath = request.getParameter("remotePath");// 获得当前路径
-            FtpAttr fa= new FtpAttr("127.0.0.1", 21, "admin", "admin",
-                    remotePath, filename, "D:/test/download/");
+            FtpAttr fa= ftpAttribute.getFtpAttr(remotePath,filename);
             FTPClient ftpClient =new FTPClient();
             AbstractFtpClientOpr afco =new DownloadFtp(fa,ftpClient, FileOperater.DOWNLOAD);
             afco.procesor();

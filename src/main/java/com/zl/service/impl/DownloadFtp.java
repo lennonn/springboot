@@ -1,9 +1,8 @@
 package com.zl.service.impl;
 
-import com.zl.entity.DtsFtpFile;
 import com.zl.entity.FtpAttr;
 import com.zl.service.AbstractFtpClientOpr;
-import com.zl.util.FileOperater;
+import com.zl.entity.FileOperater;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ftp.FTPClient;
@@ -14,7 +13,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/5/7.
@@ -29,7 +27,7 @@ public class DownloadFtp extends AbstractFtpClientOpr{
 
 
     public DownloadFtp(FtpAttr ftpAttr, FTPClient ftpClient, FileOperater fileOperater) {
-        super(ftpAttr, ftpClient, fileOperater);
+        super(ftpAttr,  fileOperater);
     }
 
     public  boolean download(){

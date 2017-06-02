@@ -3,8 +3,7 @@ package com.zl.service.impl;
 import com.zl.entity.DtsFtpFile;
 import com.zl.entity.FtpAttr;
 import com.zl.service.AbstractFtpClientOpr;
-import com.zl.util.FileOperater;
-import org.apache.commons.net.ftp.FTPClient;
+import com.zl.entity.FileOperater;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -21,15 +20,16 @@ import java.util.List;
 @Component
 public class ListMapFtp extends AbstractFtpClientOpr {
     private Logger log = LogManager.getLogger(ListMapFtp.class);
-    private FtpAttr ftpAttr;
-    private FTPClient ftpClient;
-    FileOperater fileOperater;
+
+    //private FtpAttr ftpAttr;
+
+   // private FTPClient ftpClient;
+    //FileOperater fileOperater;
 
 
 
-
-    public ListMapFtp(FtpAttr ftpAttr, FTPClient ftpClient, FileOperater fileOperater) {
-        super(ftpAttr, ftpClient, fileOperater);
+    public ListMapFtp(FtpAttr ftpAttr,FileOperater fileOperater) {
+        super(ftpAttr,  fileOperater);
     }
     @Override
     public  List<List<DtsFtpFile>> showList() {
@@ -45,15 +45,15 @@ public class ListMapFtp extends AbstractFtpClientOpr {
                 dtsFtpFile.setSize(ftpFile.getSize());
                 dtsFtpFile.setLastedUpdateTime(formatter.format(ftpFile.getTimestamp().getTime()));
                 if (ftpFile.getType() == 1 && !ftpFile.getName().equals(".") && !ftpFile.getName().equals("..")) {
-                    dtsFtpFile.setLocalPath(super.ftpAttr.getRemotePath() + "/" + ftpFile.getName());
+                    dtsFtpFile.setLocalPath(ftpAttr.getRemotePath() + "/" + ftpFile.getName());
                     listDirectory.add(dtsFtpFile);
                 } else if (ftpFile.getType() == 0) {
-                    dtsFtpFile.setLocalPath(super.ftpAttr.getRemotePath() + "/");
+                    dtsFtpFile.setLocalPath(ftpAttr.getRemotePath() + "/");
                     listFile.add(dtsFtpFile);
                 }
             }
-            super.listMap.add(listDirectory);
-            super.listMap.add(listFile);
+            listMap.add(listDirectory);
+            listMap.add(listFile);
             this.logout();
 
         } catch (IOException e) {
