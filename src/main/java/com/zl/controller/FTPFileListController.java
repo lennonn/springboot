@@ -2,8 +2,11 @@ package com.zl.controller;
 
 import com.zl.entity.DtsFtpFile;
 import com.zl.entity.FtpAttr;
+import com.zl.service.AbstractFtpClientOpr;
 import com.zl.service.impl.DownloadFtp;
 import com.zl.service.impl.ListMapFtp;
+import com.zl.util.FileOperater;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +59,12 @@ public class FTPFileListController {
         if (filename != null) {
             logger.debug("filename:---> " + filename);
         }
-        List<List<DtsFtpFile>> list = listMapFtp.showList("127.0.0.1", 21,
-                "admin", "admin", remotePath);// 获得ftp对应路径下的所有目录和文件信息
+        FtpAttr fa= new FtpAttr("127.0.0.1", 21, "admin", "admin",
+                remotePath, filename, "D:/test/download/");
+        FTPClient ftpClient =new FTPClient();
+        AbstractFtpClientOpr afco =new ListMapFtp(fa,ftpClient, FileOperater.DOWNLOAD);
+        afco.procesor();
+        List<List<DtsFtpFile>> list = afco.getListMap();// 获得ftp对应路径下的所有目录和文件信息
         List<DtsFtpFile> listDirectory = list.get(0);// 获得ftp该路径下的所有目录信息
         List<DtsFtpFile> listFile = list.get(1);// 获得ftp该路径下所有的文件信息
 
@@ -81,7 +88,9 @@ public class FTPFileListController {
             String remotePath = request.getParameter("remotePath");// 获得当前路径
             FtpAttr fa= new FtpAttr("127.0.0.1", 21, "admin", "admin",
                     remotePath, filename, "D:/test/download/");
-            downloadFtp.downFile(fa);
+            FTPClient ftpClient =new FTPClient();
+            AbstractFtpClientOpr afco =new DownloadFtp(fa,ftpClient, FileOperater.DOWNLOAD);
+            afco.procesor();
             //下载机器码文件
             response.setHeader("conent-type", "application/octet-stream");
             response.setContentType("application/octet-stream");

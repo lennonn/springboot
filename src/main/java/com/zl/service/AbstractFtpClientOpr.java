@@ -1,28 +1,37 @@
-package com.zl.service.impl;
+package com.zl.service;
 
+import com.zl.entity.DtsFtpFile;
 import com.zl.entity.FtpAttr;
+import com.zl.util.FileOperater;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/5/23.
  */
-public class FtpClientOpr {
-    private static final Log log = LogFactory.getLog(FtpClientOpr.class);
-    private FtpAttr ftpAttr;
-    private FTPClient ftpClient;
+public abstract class AbstractFtpClientOpr {
+    private static final Log log = LogFactory.getLog(AbstractFtpClientOpr.class);
+    protected FtpAttr ftpAttr;
+    protected FTPClient ftpClient;
+    FileOperater fileOperater;
+    protected List<List<DtsFtpFile>> listMap;
+    public List<List<DtsFtpFile>> getListMap() {
+        return listMap;
+    }
 
-    public FtpClientOpr(FtpAttr ftpAttr) {
+    public void setListMap(List<List<DtsFtpFile>> listMap) {
+        this.listMap = listMap;
+    }
+    public AbstractFtpClientOpr(FtpAttr ftpAttr, FTPClient ftpClient,FileOperater fileOperater) {
         this.ftpAttr = ftpAttr;
-        ftpClient = new FTPClient();
+        this.ftpClient = ftpClient;
+        this.fileOperater = fileOperater;
     }
 
     public void connect() {
@@ -54,6 +63,7 @@ public class FtpClientOpr {
         }
     }
 
+
     public void changeWorkingDirectory() {
         try {
             if (ftpAttr.getRemotePath().endsWith("/"))
@@ -65,6 +75,7 @@ public class FtpClientOpr {
         }
     }
 
+
     public void logout() {
         try {
             ftpClient.logout();
@@ -72,6 +83,7 @@ public class FtpClientOpr {
             log.error("ftpClient logout falied");
         }
     }
+
 
     public void close() {
         try {
@@ -83,36 +95,42 @@ public class FtpClientOpr {
         }
     }
 
-    public boolean download() {
-        OutputStream os = null;
-        boolean isDownload =false;
+    public   FTPFile[] getFtpFiles(){
+        FTPFile[] ftpFiles = null;
         try {
-
-            FTPFile[] fs = ftpClient.listFiles();
-            for (FTPFile ff : fs) {
-                if (ff.getName().equals(ftpAttr.getFileName())) {
-                    File localFile = new File("F:\\FromGit\\springboot\\src\\main\\resources\\static\\file\\" + ff.getName());
-                    if (!localFile.exists())
-                        localFile.createNewFile();
-                    os = new FileOutputStream(localFile);
-                    ftpClient.retrieveFile(ff.getName(), os);
-                    if(os!=null)
-                        isDownload=true;
-                    os.close();
-                    break;
-                }
-            }
-
-        } catch (IOException e) {
-            log.error("failed!");
-        }finally {
-            if(ftpClient.isConnected())
-                try {
-                    ftpClient.disconnect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            ftpFiles = ftpClient.listFiles();
+        }catch (IOException e){
+            log.error("error!");
         }
-        return isDownload;
+        return  ftpFiles;
     }
+
+    public  boolean download(){
+        return false;
+    };
+
+    public  List<List<DtsFtpFile>> showList(){
+        return null;
+    };
+
+    public void OperaterType(){
+        switch (fileOperater){
+            case SHOWLIST :
+                this.showList();
+                break;
+            case UPLOAD:
+                this.download();
+                break;
+        }
+    }
+
+    public void procesor(){
+        this.connect();
+        this.login();
+        this.getReplyCode();
+        this.changeWorkingDirectory();
+        this.OperaterType();
+        this.logout();
+    }
+
 }
