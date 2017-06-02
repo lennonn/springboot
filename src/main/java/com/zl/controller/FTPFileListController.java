@@ -32,12 +32,6 @@ import java.util.Map;
 public class FTPFileListController {
     private Logger logger = LogManager.getLogger(FTPFileListController.class);
 
-    @Autowired
-    private ListMapFtp listMapFtp;
-    @Autowired
-    private DownloadFtp downloadFtp;
-    @Autowired
-    FtpAttrStaticImpl ftpAttribute;
 
     @RequestMapping("/portal")
     public String portal(){
@@ -60,6 +54,7 @@ public class FTPFileListController {
         if (filename != null) {
             logger.debug("filename:---> " + filename);
         }
+        FtpAttrStaticImpl  ftpAttribute = new FtpAttrStaticImpl();
         FtpAttr ftpAttr= ftpAttribute.getFtpAttr(remotePath,filename);
         AbstractFtpClientOpr afco =new ListMapFtp(ftpAttr, FileOperater.DOWNLOAD);
         afco.procesor();
@@ -85,6 +80,8 @@ public class FTPFileListController {
         try {
             String filename = request.getParameter("filename");// 获得当前文件的名称
             String remotePath = request.getParameter("remotePath");// 获得当前路径
+            FtpAttrStaticImpl  ftpAttribute = new FtpAttrStaticImpl();
+
             FtpAttr fa= ftpAttribute.getFtpAttr(remotePath,filename);
             FTPClient ftpClient =new FTPClient();
             AbstractFtpClientOpr afco =new DownloadFtp(fa,ftpClient, FileOperater.DOWNLOAD);

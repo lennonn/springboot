@@ -21,7 +21,7 @@ public abstract class AbstractFtpClientOpr {
     protected FTPClient ftpClient=new FTPClient();
     FileOperater fileOperater;
 
-    protected List<List<DtsFtpFile>> listMap;
+    public List<List<DtsFtpFile>> listMap;
     public List<List<DtsFtpFile>> getListMap() {
         return listMap;
     }
@@ -116,7 +116,7 @@ public abstract class AbstractFtpClientOpr {
 
     public void OperaterType(){
         switch (fileOperater){
-            case SHOWLIST :
+            case DOWNLOAD:
                 this.showList();
                 break;
             case UPLOAD:

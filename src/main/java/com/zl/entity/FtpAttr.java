@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 /**
  * Created by Administrator on 2017/5/23.
  */
-@Component
 public class FtpAttr {
     private String url;// FTP服务器hostname
     private int port;// FTP服务器端口

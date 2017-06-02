@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * Created by Administrator on 2017/5/7.
  */
-@Component
 public class ListMapFtp extends AbstractFtpClientOpr {
     private Logger log = LogManager.getLogger(ListMapFtp.class);
 
@@ -36,7 +35,7 @@ public class ListMapFtp extends AbstractFtpClientOpr {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<DtsFtpFile> listFile = new ArrayList<DtsFtpFile>();
         List<DtsFtpFile> listDirectory = new ArrayList<DtsFtpFile>();
-
+        listMap= new List<List<DtsFtpFile>>();
         try {
             FTPFile[] fs = ftpClient.listFiles();
             for (FTPFile ftpFile : fs) {

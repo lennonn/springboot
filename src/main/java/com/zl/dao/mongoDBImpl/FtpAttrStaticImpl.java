@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 /**
  * Created by Administrator on 2017/6/2.
  */
-@Component("ftpAttribute")
 public class FtpAttrStaticImpl implements FtpAttrDao {
     @Override
     public FtpAttr getFtpAttr(String remotePath,String filename) {

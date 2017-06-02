@@ -17,13 +17,8 @@ import java.io.OutputStream;
 /**
  * Created by Administrator on 2017/5/7.
  */
-@Component
 public class DownloadFtp extends AbstractFtpClientOpr{
     private static final Log log = LogFactory.getLog(DownloadFtp.class);
-
-    private FtpAttr ftpAttr;
-    private FTPClient ftpClient;
-    FileOperater fileOperater;
 
 
     public DownloadFtp(FtpAttr ftpAttr, FTPClient ftpClient, FileOperater fileOperater) {
